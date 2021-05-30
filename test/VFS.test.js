@@ -10,8 +10,8 @@ import GOOG from './GOOG.js';
 import sinon from '../.yarn/unplugged/sinon-npm-11.0.0-1b596cee10/node_modules/sinon/pkg/sinon-esm.js';
 
 /**
- * @param {SQLiteAPI} sqlite3 
- * @param {number} db 
+ * @param {SQLiteAPI} sqlite3
+ * @param {number} db
  */
 async function loadSampleTable(sqlite3, db) {
   await sqlite3.exec(db, `
@@ -42,7 +42,7 @@ function shared(ready) {
   let db, sql;
   beforeEach(async function() {
     ({ sqlite3, vfs} = await ready);
-    db = await sqlite3.open_v2('foo', 0x06, vfs.name);
+    db = await sqlite3.open_v2('foo', 0x06, vfs.name());
 
     // Delete all tables.
     const tables = [];
@@ -431,7 +431,7 @@ function shared(ready) {
 
     // Close and reopen the database.
     await sqlite3.close(db);
-    db = await sqlite3.open_v2('foo', 0x06, vfs.name);
+    db = await sqlite3.open_v2('foo', 0x06, vfs.name());
 
     const resultB = await sql`SELECT COUNT(*) FROM goog`;
     expect(resultB[0][0]).toBe(resultA[0][0]);

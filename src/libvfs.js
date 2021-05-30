@@ -9,7 +9,7 @@ const vfs_methods = {
 
     Module['registerVFS'] = function(vfs, makeDefault) {
       const vfsAlreadyRegistered = ccall('sqlite3_vfs_find', 'number', ['string'],
-        [vfs.name]);
+        [vfs.name()]);
       if (vfsAlreadyRegistered) {
         throw Error(`VFS '${vfs}' already registered`);
       }
@@ -22,7 +22,7 @@ const vfs_methods = {
       const mxPathName = vfs.mxPathName ?? 64;
       const out = Module['_malloc'](4);
       const result = ccall('register_vfs', 'number', ['string', 'number', 'number', 'number'],
-        [vfs.name, mxPathName, makeDefault ? 1 : 0, out]);
+        [vfs.name(), mxPathName, makeDefault ? 1 : 0, out]);
       if (!result) {
         const id = getValue(out, 'i32');
         mapIdToVFS.set(id, vfs);
